@@ -18,22 +18,25 @@ import tk.tommy.rename.Item;
 
 
 public class BilibiliVidioRename {
-    static String child = "83170235";
-    static String parent = System.getProperty("user.dir");
-    static String viedoFolder = "C:\\Users\\yu_da\\Downloads\\bilibiliViedo";
+    static String outPutFolderParent = "C:/Users/yu_da/OneDrive/Desktop";
+    static String vidioFolder = "C:/Users/yu_da/Downloads/bilibiliVidio";
 
     public static void main(String[] args) throws Exception {
+        String child = "925160311";
+        createOne(child);
+    }
 
+    public static void createOne(String child) throws Exception {
 
         BilibiliVidioRename bilibiliVidioRename = new BilibiliVidioRename();
-        bilibiliVidioRename.title = bilibiliVidioRename.createTitle();
+        bilibiliVidioRename.title = bilibiliVidioRename.createTitle(child);
         IntStream.range(1, 10).forEach(e -> System.out.println(bilibiliVidioRename.title));
         bilibiliVidioRename.targetFolder = bilibiliVidioRename.createTargetFolder();
-        List<Item> items = bilibiliVidioRename.createInfo();
+        List<Item> items = bilibiliVidioRename.createInfo(child);
         items.forEach(System.out::println);
 
         items.stream()
-            .map(item -> getItemBlvFolders(item))
+            .map(item -> getItemBlvFolders(item, child))
             .forEach(item -> {
                 List<Path> blvFolders = item.blvFolders;
                 if (blvFolders.size() > 1) {
@@ -61,17 +64,16 @@ public class BilibiliVidioRename {
         IntStream.range(1, 10).forEach(e -> System.out.println("[LOG]" + bilibiliVidioRename.title + " done"));
 
 
-        final File file = Paths.get(parent, child).toFile();
+        final File file = Paths.get(vidioFolder, child).toFile();
         if (file.exists()) {
             System.out.println("[LOG]  " + file.toString());
-            file.deleteOnExit();
         }
 
     }
 
-    private static Item getItemBlvFolders(final Item item) {
+    private static Item getItemBlvFolders(final Item item, final String child) {
         try {
-            item.blvFolders = Files.list(Paths.get(parent + "/" + child, "" + item.index))
+            item.blvFolders = Files.list(Paths.get(vidioFolder + "/" + child, "" + item.index))
                 .filter(pa -> pa.toFile().isDirectory())
                 .collect(Collectors.toList());
 
@@ -86,22 +88,22 @@ public class BilibiliVidioRename {
     String title;
     private File targetFolder;
 
-    private List<Item> createInfo() throws IOException {
-        return Files.list(Paths.get(parent, child))
+    private List<Item> createInfo(final String child) throws IOException {
+        return Files.list(Paths.get(vidioFolder, child))
             .map(Path::getFileName)
             .map(String::valueOf)
             .map(Integer::parseInt)
             .filter(n -> !Objects.equals(title, n.toString()))
             .sorted()
-            .map(this::createItem)
+            .map(index -> createItem(index, child))
             .collect(Collectors.toList());
     }
 
-    private Item createItem(Integer index) {
+    private Item createItem(Integer index, final String child) {
         try {
             final String targetName = StringUtils.leftPad("" + index, 3, "0") + "-";
-            String eachFolder = parent + "/" + child + "/" + index;
-            Stream<Path> list1 = Files.list(Paths.get(parent + "/" + child, "" + index));
+            String eachFolder = outPutFolderParent + "/" + child + "/" + index;
+            Stream<Path> list1 = Files.list(Paths.get(vidioFolder + "/" + child, "" + index));
             String flvName = createFlvName(list1);
             return new Item(targetName, eachFolder, flvName, index);
         } catch (IOException e) {
@@ -130,14 +132,14 @@ public class BilibiliVidioRename {
 
 
     private File createTargetFolder() {
-        File targetFolder = new File(Paths.get(parent).getParent().toString(), title);
+        File targetFolder = new File(Paths.get(outPutFolderParent).toString(), title);
         targetFolder.mkdir();
         return targetFolder;
     }
 
-    private String createTitle() {
+    private String createTitle(final String child) {
         try {
-            final File entryJsonFile = new File(parent + "/" + child + "/1/entry.json");
+            final File entryJsonFile = new File(vidioFolder + "/" + child + "/1/entry.json");
             final String source = FileUtils.readFileToString(entryJsonFile, "utf-8");
             return new JSONObject(source)
                 .getString("title")
