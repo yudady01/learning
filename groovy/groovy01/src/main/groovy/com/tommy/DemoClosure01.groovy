@@ -1,7 +1,7 @@
 package com.tommy
 // Closure
 def c = {
-    print "hello tommy"
+    println "hello tommy"
 }
 // method
 def method(Closure closure) {

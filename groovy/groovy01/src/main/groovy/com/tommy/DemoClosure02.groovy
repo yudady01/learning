@@ -2,18 +2,18 @@ package com.tommy
 // Closure
 def c = {
     v ->
-        print "hello ${v}"
+        println "hello ${v}"
 }
 method('tommy', c)
 methodB('tommy', c)
 // ---------------------------
 method('tommy') {
     v ->
-        print "hello ${v}"
+        println "hello ${v}"
 }
 methodB('tommy') {
     v ->
-        print "hello ${v}"
+        println "hello ${v}"
 }
 // ---------------------------
 // method

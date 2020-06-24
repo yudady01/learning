@@ -2,7 +2,7 @@ package com.tommy
 // Closure
 def c = {
     k, v ->
-        print "hello ${k} : ${v}"
+        println "hello ${k} : ${v}"
 
 }
 // method

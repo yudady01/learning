@@ -1,5 +1,5 @@
 apply plugin: "groovy"
 
 dependencies {
-    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.2', ext: 'pom'
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.2'
 }
