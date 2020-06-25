@@ -18,6 +18,8 @@ allprojects {
         testCompile group: 'junit', name: 'junit', version: '4.12'
     }
 
+    buildDir = "${rootDir}/build/${rootDir.relativePath(projectDir)}"
+
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
     }

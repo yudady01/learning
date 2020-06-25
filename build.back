@@ -1,0 +1,66 @@
+//buildscript {
+//
+//}
+//
+//allprojects {
+//    apply plugin: "java"
+//    apply plugin: "idea"
+//    group 'tk.tommy'
+//    version '1.0-SNAPSHOT'
+//    sourceCompatibility = 1.8
+//    targetCompatibility = 1.8
+//
+//    repositories {
+//        mavenLocal()
+//        mavenCentral()
+//    }
+//    dependencies {
+//        testCompile group: 'junit', name: 'junit', version: '4.12'
+//    }
+//
+//    tasks.withType(JavaCompile) {
+//        options.encoding = "UTF-8"
+//    }
+//
+//
+//    task subProjectsTask {
+//        dependsOn clean {
+//            println 'Configure subProjectsTask : ' + project.name
+//            doFirst {
+//                println 'doFirst subProjectsTask : ' + project.name
+//            }
+//            doLast {
+//                println 'doLast subProjectsTask : ' + project.name
+//            }
+//        }
+//    }
+//
+//}
+//
+//task rootProjectTask {
+//    dependsOn build {
+//        println '[LOG] Configure rootProjectTask'
+//        doFirst {
+//            println '[LOG] doFirst rootProjectTask'
+//        }
+//        doLast {
+//            println '[LOG] doLast rootProjectTask'
+//        }
+//    }
+//
+//}
+//
+//project.afterEvaluate {
+//
+//}
+//
+//task testPro {
+//    project.getAllprojects()
+//            .stream()
+//            .filter({ pro ->
+//                pro.name.contains("bilibili")
+//            })
+//            .forEach({
+//                println it.name
+//            })
+//}
