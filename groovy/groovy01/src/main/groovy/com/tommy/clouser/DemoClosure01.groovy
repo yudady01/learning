@@ -1,4 +1,4 @@
-package com.tommy
+package com.tommy.clouser
 // Closure
 def c = {
     println "hello tommy"

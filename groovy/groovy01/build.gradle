@@ -1,6 +1,6 @@
 apply plugin: "groovy"
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.13'
-    compile ('org.codehaus.groovy:groovy-all:3.0.2')
+    testImplementation group: 'junit', name: 'junit', version: '4.13'
+    implementation ('org.codehaus.groovy:groovy-all:3.0.2')
 }
