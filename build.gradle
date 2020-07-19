@@ -7,8 +7,8 @@ allprojects {
     apply plugin: "idea"
     group 'tk.tommy'
     version '1.0-SNAPSHOT'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 8
+    targetCompatibility = 8
 
     buildDir = "${rootDir}/build/${rootDir.relativePath(projectDir)}"
     tasks.withType(JavaCompile) {
