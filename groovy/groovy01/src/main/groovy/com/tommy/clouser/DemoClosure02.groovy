@@ -4,16 +4,16 @@ def c = {
     v ->
         println "hello ${v}"
 }
-method('tommy', c)
-methodB('tommy', c)
+method('call method ', c)
+methodB('call methodB ', c)
 // ---------------------------
 method('tommy') {
     v ->
-        println "hello ${v}"
+        println "inner method hello ${v}"
 }
 methodB('tommy') {
     v ->
-        println "hello ${v}"
+        println "inner methodB hello ${v}"
 }
 // ---------------------------
 // method
@@ -23,4 +23,8 @@ def method(para, Closure closure) {
 // method
 def methodB(para, Closure closure) {
     closure(para)
+}
+
+static void main(String[] args) {
+
 }

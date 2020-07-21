@@ -10,3 +10,6 @@ def method(Closure closure) {
 
 method(c)
 
+static void main(String[] args) {
+
+}
