@@ -1,6 +1,7 @@
 package tk.tommy.v2;
 
 import com.google.common.base.Strings;
+import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -18,19 +19,32 @@ public class CreateItemInfo {
 
     public static void main(String[] args) throws Exception {
         String vidioFolder = "C:/Users/yu_da/Downloads/bilibiliVidio/";
-        String child = "667705991";
-
+        String child = "584139198";
         create(vidioFolder, child).forEach(System.out::println);
     }
 
+    private static String getMagicNumber(String vidioFolder, String child) {
+        try {
+            return Files.list(Paths.get(vidioFolder + "/" + child + "/1"))
+                .filter(path -> path.toFile().isDirectory())
+                .map(path -> String.valueOf(path.getFileName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("magic  number fail"));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
+    }
+
     public static List<ItemInfo> create(String vidioFolder, String child) {
+        final String magicNumber = getMagicNumber(vidioFolder, child);
         try {
             return Files.list(Paths.get(vidioFolder + child))
                 .map(folder -> {
                     ItemInfo into = new ItemInfo();
                     into.index = Strings.padStart(folder.getFileName().toString(), 3, '0');
-                    into.name = getName(Paths.get(folder.toFile().toString() ,"/entry.json"));
-                    String mp4Path = folder.toFile() + "/80/";
+                    into.name = getName(Paths.get(folder.toFile().toString(), "/entry.json"));
+                    String mp4Path = folder.toFile() + "/" + magicNumber + "/";
                     List<String> inputs = new ArrayList();
                     inputs.add(mp4Path + "video.m4s");
                     inputs.add(mp4Path + "audio.m4s");
