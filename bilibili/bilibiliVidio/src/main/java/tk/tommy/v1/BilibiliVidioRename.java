@@ -1,4 +1,4 @@
-package tk.tommy;
+package tk.tommy.v1;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class BilibiliVidioRename {
     static String vidioFolder = "C:/Users/yu_da/Downloads/bilibiliVidio";
 
     public static void main(String[] args) throws Exception {
-        String child = "925160311";
+        String child = "667705991";
         createOne(child);
     }
 

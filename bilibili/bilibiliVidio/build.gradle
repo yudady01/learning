@@ -5,10 +5,10 @@ dependencies {
     implementation group: 'com.intellij', name: 'forms_rt', version: '7.0.3'
 
     implementation group: 'asm', name: 'asm-all', version: '3.3.1'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation group: 'org.json', name: 'json', version: '20180813'
 
     compileOnly 'org.projectlombok:lombok:1.18.4'
     implementation 'com.alibaba:fastjson:1.2.55'
+
+    implementation group: 'net.bramp.ffmpeg', name: 'ffmpeg', version: '0.6.2'
 }
