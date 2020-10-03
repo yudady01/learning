@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +16,6 @@ import java.util.List;
 public class FFmpegMediaUtil {
 
     private static final String FFMPEG_PATH = FFmpegMediaUtil.class.getResource("/ffmpeg.exe").getFile();
-
-    public static void main(String[] args) {
-
-        System.out.println("[LOG] s = " + FFMPEG_PATH);
-
-    }
 
     /**
      * "ffmpeg -i video.m4s -i audio.m4s -c:v copy -strict experimental 输出名.mp4"
@@ -52,8 +45,6 @@ public class FFmpegMediaUtil {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-
-
     }
 
     private static void ioProcess(final Process process) {
