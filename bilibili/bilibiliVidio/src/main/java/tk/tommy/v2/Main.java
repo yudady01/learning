@@ -11,9 +11,17 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
+        Files.list(Paths.get(VIDIO_FOLDER))
+            .filter(path -> String.valueOf(path.getFileName()).matches("-?\\d+(\\.\\d+)?"))
+            .map(path -> path.getFileName().toString())
+            .forEach(viedo -> {
+                createOneViedo(viedo);
+                deleteOneViedo(viedo);
+            });
+    }
 
-        String child = "667705991";
-        createOneViedo(child);
+    private static void deleteOneViedo(final String viedo) {
+        Paths.get(VIDIO_FOLDER, viedo).toFile().deleteOnExit();
     }
 
 
