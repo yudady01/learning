@@ -48,7 +48,7 @@ public class FFmpegMediaUtil {
 
     private static void ioProcess(final Process process) {
         try (InputStream errorStream = process.getErrorStream(); BufferedReader br = new BufferedReader(new InputStreamReader(errorStream));) {
-            String line = "";
+            String line;
             while ((line = br.readLine()) != null) {
                 System.out.println("[LOG] line = " + line);
             }
