@@ -5,6 +5,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.apache.commons.io.FileUtils;
 
 public class Main {
     private static final String VIDIO_FOLDER = "C:/Users/yu_da/Downloads/bilibiliVidio/";
@@ -21,7 +22,12 @@ public class Main {
     }
 
     private static void deleteOneViedo(final String viedo) {
-        Paths.get(VIDIO_FOLDER, viedo).toFile().deleteOnExit();
+        try {
+            FileUtils.deleteDirectory(Paths.get(VIDIO_FOLDER, viedo).toFile());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
     }
 
 
