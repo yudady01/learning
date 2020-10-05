@@ -23,7 +23,6 @@ public class FFmpegMediaUtil {
      *
      * @param videoInputPaths 视频文件路径（输入）
      * @param videoOutputPath 转换完成的文件路径（输出）
-     * @throws Exception
      */
     public static void videoConvert(List<String> videoInputPaths, String videoOutputPath) {
         // 构建命令
