@@ -1,23 +1,19 @@
 package tk.tommy.v2;
 
 import com.google.common.base.Strings;
-import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.json.JSONObject;
-
 
 public class CreateItemInfo {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String vidioFolder = "C:/Users/yu_da/Downloads/bilibiliVidio/";
         String child = "584139198";
         create(vidioFolder, child).forEach(System.out::println);
@@ -40,17 +36,7 @@ public class CreateItemInfo {
         final String magicNumber = getMagicNumber(vidioFolder, child);
         try {
             return Files.list(Paths.get(vidioFolder + child))
-                .map(folder -> {
-                    ItemInfo into = new ItemInfo();
-                    into.index = Strings.padStart(folder.getFileName().toString(), 3, '0');
-                    into.name = getName(Paths.get(folder.toFile().toString(), "/entry.json"));
-                    String mp4Path = folder.toFile() + "/" + magicNumber + "/";
-                    List<String> inputs = new ArrayList();
-                    inputs.add(mp4Path + "video.m4s");
-                    inputs.add(mp4Path + "audio.m4s");
-                    into.inputs = inputs;
-                    return into;
-                })
+                .map(folder -> createItemInfo(folder, magicNumber))
                 .sorted(Comparator.comparing(info -> Integer.parseInt(info.index)))
                 .collect(Collectors.toList());
         } catch (IOException e) {
@@ -58,14 +44,24 @@ public class CreateItemInfo {
         }
     }
 
+    private static ItemInfo createItemInfo(Path folder, String magicNumber) {
+        ItemInfo into = new ItemInfo();
+        into.index = Strings.padStart(folder.getFileName().toString(), 3, '0');
+        into.name = getName(Paths.get(folder.toFile().toString(), "/entry.json"));
+        String mp4Path = folder.toFile() + "/" + magicNumber + "/";
+        into.inputs = List.of(mp4Path + "video.m4s", mp4Path + "audio.m4s");
+        return into;
+    }
+
     private static String getName(Path itemNamePath) {
         try {
-
             final String json = String.join("", Files.readAllLines(itemNamePath));
-            return new JSONObject(new JSONObject(json).get("page_data").toString()).get("part").toString();
+            System.out.println("[LOG] json = " + json);
+            final String page_data = new JSONObject(json).get("page_data").toString();
+            System.out.println("[LOG] page_data = " + page_data);
+            return new JSONObject(page_data).get("part").toString();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
-
 }
