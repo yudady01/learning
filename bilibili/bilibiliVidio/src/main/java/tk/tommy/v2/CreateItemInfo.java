@@ -1,13 +1,17 @@
 package tk.tommy.v2;
 
 import com.google.common.base.Strings;
+import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.json.JSONObject;
 
@@ -19,24 +23,10 @@ public class CreateItemInfo {
         create(vidioFolder, child).forEach(System.out::println);
     }
 
-    private static String getMagicNumber(String vidioFolder, String child) {
-        try {
-            return Files.list(Paths.get(vidioFolder + "/" + child + "/1"))
-                .filter(path -> path.toFile().isDirectory())
-                .map(path -> String.valueOf(path.getFileName()))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("magic  number fail"));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-
-    }
-
     public static List<ItemInfo> create(String vidioFolder, String child) {
-        final String magicNumber = getMagicNumber(vidioFolder, child);
         try {
             return Files.list(Paths.get(vidioFolder + child))
-                .map(folder -> createItemInfo(folder, magicNumber))
+                .map(CreateItemInfo::createItemInfo)
                 .sorted(Comparator.comparing(info -> Integer.parseInt(info.index)))
                 .collect(Collectors.toList());
         } catch (IOException e) {
@@ -44,12 +34,24 @@ public class CreateItemInfo {
         }
     }
 
-    private static ItemInfo createItemInfo(Path folder, String magicNumber) {
+    private static ItemInfo createItemInfo(Path folder) {
         ItemInfo into = new ItemInfo();
         into.index = Strings.padStart(folder.getFileName().toString(), 3, '0');
         into.name = getName(Paths.get(folder.toFile().toString(), "/entry.json"));
-        String mp4Path = folder.toFile() + "/" + magicNumber + "/";
+        final File directory = Arrays.stream(Objects.requireNonNull(folder.toFile().listFiles()))
+            .filter(File::isDirectory)
+            .findFirst()
+            .orElseThrow(() -> new FileSystemNotFoundException("createItemInfo FileNotFoundException" + folder.toFile().getPath()));
+        String mp4Path = folder.toFile() + "/" + directory.getName() + "/";
         into.inputs = List.of(mp4Path + "video.m4s", mp4Path + "audio.m4s");
+
+        into.inputs.forEach(videoPath -> {
+            if (!new File(videoPath).exists()) {
+                System.out.println("[LOG] videoPath not found = " + videoPath);
+                throw new FileSystemNotFoundException("videoPath FileNotFoundException" + videoPath);
+            }
+        });
+
         return into;
     }
 
